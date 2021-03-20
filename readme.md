@@ -1,5 +1,10 @@
 # Discord Corona Bot
 
+![Visitors](https://page-views.glitch.me/badge?page_id=markxoe.covid-bot)
+
+![DC Bot](https://img.shields.io/badge/Discord-Bot-blue?style=for-the-badge)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/markxoe/covid-bot?style=for-the-badge)
+
 ## Beschreibung
 
 Einfacher Discord Bot für die Corona API <https://github.com/marlon360/rki-covid-api>
