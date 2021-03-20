@@ -31,8 +31,8 @@ client.on("message", async (message) => {
         "Befehle:",
         multiLine(
           toCode("corona de") + " Gibt Infos für Deutschland aus",
-          toCode("corona lk ...") + "Gibt Infos für einen Landkreis aus",
-          toCode("corona bl ...") + "Gibt Infos für ein Bundesland aus"
+          toCode("corona lk ...") + " Gibt Infos für einen Landkreis aus",
+          toCode("corona bl ...") + " Gibt Infos für ein Bundesland aus"
         )
       );
       embed.setFooter("Version: " + version);
