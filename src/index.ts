@@ -25,20 +25,21 @@ client.on("message", async (message) => {
   if (messageContent.startsWith("corona")) {
     const args = messageContent.split(" ");
     if (args.length == 1) {
-      message.channel.send(
+      const embed = new Discord.MessageEmbed();
+      embed.setTitle("Der :sparkles:Corona Bot:sparkles:");
+      embed.addField(
+        "Befehle:",
         multiLine(
-          toFat("Der :sparkles:Corona Bot:sparkles:"),
-          "",
-          toFat("Befehle:"),
-          "",
           toCode("corona de") + " Gibt Infos für Deutschland aus",
           toCode("corona lk ...") + "Gibt Infos für einen Landkreis aus",
-          toCode("corona bl ...") + "Gibt Infos für ein Bundesland aus",
-          "",
-          "Source Code: https://github.com/markxoe/covid-bot",
-          "Version: " + toCode(version)
+          toCode("corona bl ...") + "Gibt Infos für ein Bundesland aus"
         )
       );
+      embed.setFooter("Version: " + version);
+      embed.setURL("https://github.com/markxoe/covid-bot");
+      embed.setDescription("Einfacher Bot zum Anzeigen von Corona Daten");
+      embed.setColor("#ff3333");
+      message.channel.send(embed);
     } else if (args[1] === "de") {
       const apiCall = await covidGermany();
       if (apiCall.ok && apiCall.data) {
