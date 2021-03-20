@@ -59,6 +59,7 @@ client.on("message", async (message) => {
             },
             title: "Deutschland",
             weekIncidence: apiCall.data.weekIncidence,
+            source: apiCall.data.meta.source,
           })
         );
       } else message.reply("Es ist ein Fehler aufgetreten, sorry!");
@@ -94,6 +95,7 @@ client.on("message", async (message) => {
               time: new Date(apiCall.data.meta.lastUpdate),
               title: state.name,
               weekIncidence: state.weekIncidence,
+              source: apiCall.data.meta.source,
             })
           );
         } else {
@@ -132,6 +134,7 @@ client.on("message", async (message) => {
               time: new Date(apiCall.data.meta.lastUpdate),
               title: district.name,
               weekIncidence: district.weekIncidence,
+              source: apiCall.data.meta.source,
             })
           );
         } else {

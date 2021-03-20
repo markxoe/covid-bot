@@ -23,6 +23,7 @@ export const makeEmbed = (input: {
   locationInfo: { name: string; value: string };
   contact: string;
   rwert?: { name: string; value: string };
+  source: string;
 }): MessageEmbed => {
   const out = new MessageEmbed();
   out.addFields([
@@ -54,5 +55,6 @@ export const makeEmbed = (input: {
   out.addFields([{ name: "Kontakt", value: input.contact }]);
   out.setTitle("Corona in :sparkles:" + input.title + ":sparkles: ");
   out.setTimestamp(input.time);
+  out.setAuthor(input.source);
   return out;
 };
