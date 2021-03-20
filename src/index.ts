@@ -4,12 +4,20 @@ config();
 import * as Discord from "discord.js";
 import { covidDistricts, covidGermany, covidStates } from "./api";
 import { makeEmbed, multiLine, toCode, toFat } from "./dctools";
+import * as fs from "fs";
+import * as path from "path";
 
 const client = new Discord.Client();
 
 if (process.env.TOKEN.length == 0) {
   throw Error("Hab kein Token");
 }
+
+let version = "unknown";
+fs.readFile(path.join(__dirname, "../package.json"), (err, data) => {
+  if (err) throw Error("Kann package.json nicht lesen");
+  version = String(JSON.parse(data.toString()).version);
+});
 
 client.on("message", async (message) => {
   const messageContent = message.content.trim().toLowerCase();
@@ -25,7 +33,10 @@ client.on("message", async (message) => {
           "",
           toCode("corona de") + " Gibt Infos für Deutschland aus",
           toCode("corona lk ...") + "Gibt Infos für einen Landkreis aus",
-          toCode("corona bl ...") + "Gibt Infos für ein Bundesland aus"
+          toCode("corona bl ...") + "Gibt Infos für ein Bundesland aus",
+          "",
+          "Source Code: https://github.com/markxoe/covid-bot",
+          "Version: " + toCode(version)
         )
       );
     } else if (args[1] === "de") {
