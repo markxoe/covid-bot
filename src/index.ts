@@ -3,7 +3,7 @@ config();
 
 import * as Discord from "discord.js";
 import { covidDistricts, covidGermany, covidStates } from "./api";
-import { makeEmbed, multiLine, toCode, toFat } from "./dctools";
+import { makeEmbed, multiLine, toCode } from "./dctools";
 import * as fs from "fs";
 import * as path from "path";
 
