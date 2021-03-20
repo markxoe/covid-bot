@@ -6,9 +6,9 @@ Einfacher Discord Bot für die Corona API <https://github.com/marlon360/rki-covi
 
 ## Befehle
 
-`corona de` - Gibt Infos für Deutschland aus
-`corona lk ...` - Gibt Infos für einen Landkreis aus
-`corona bl ...` - Gibt Infos für ein Bundesland aus
+- `corona de` - Gibt Infos für Deutschland aus
+- `corona lk ...` - Gibt Infos für einen Landkreis aus
+- `corona bl ...` - Gibt Infos für ein Bundesland aus
 
 ## Installation
 
