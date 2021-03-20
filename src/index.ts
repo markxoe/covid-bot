@@ -3,7 +3,7 @@ config();
 
 import * as Discord from "discord.js";
 import { covidDistricts, covidGermany, covidStates } from "./api";
-import { multiLine, toCode, toFat } from "./dctools";
+import { makeEmbed, multiLine, toCode, toFat } from "./dctools";
 
 const client = new Discord.Client();
 
@@ -31,45 +31,36 @@ client.on("message", async (message) => {
     } else if (args[1] === "de") {
       const apiCall = await covidGermany();
       if (apiCall.ok && apiCall.data) {
-        const embed = new Discord.MessageEmbed();
-        embed.setTitle("Corona in :sparkles:Deutschland:sparkles:");
-
-        embed.addFields([
-          {
-            name: "Inzidenz",
-            value: toCode(apiCall.data.weekIncidence.toFixed(2)),
-          },
-          {
-            name: "Gesamt",
-            value: multiLine(
-              "Fälle: " + toCode(apiCall.data.cases),
-              "Tote: " + toCode(apiCall.data.deaths),
-              "Geheilt: " + toCode(apiCall.data.recovered)
-            ),
-          },
-          {
-            name: "Delta",
-            value: multiLine(
-              "Fälle: " + toCode(apiCall.data.delta.cases),
-              "Tote: " + toCode(apiCall.data.delta.deaths),
-              "Geheilt: " + toCode(apiCall.data.delta.recovered)
-            ),
-          },
-        ]);
-
-        embed.addField(
-          "R Wert",
-          toCode(apiCall.data.r.value) +
-            " (" +
-            new Date(apiCall.data.r.date).toLocaleDateString() +
-            ")"
+        message.channel.send(
+          makeEmbed({
+            delta: {
+              cases: apiCall.data.delta.cases,
+              deaths: apiCall.data.delta.deaths,
+              recovered: apiCall.data.delta.recovered,
+            },
+            time: new Date(apiCall.data.meta.lastUpdate),
+            contact: apiCall.data.meta.contact,
+            rwert: {
+              name: "R Wert",
+              value:
+                toCode(apiCall.data.r.value) +
+                " (" +
+                new Date(apiCall.data.r.date).toLocaleDateString() +
+                ")",
+            },
+            locationInfo: {
+              name: "Land",
+              value: multiLine("Deutschland"),
+            },
+            present: {
+              cases: apiCall.data.cases,
+              deaths: apiCall.data.deaths,
+              recovered: apiCall.data.recovered,
+            },
+            title: "Deutschland",
+            weekIncidence: apiCall.data.weekIncidence,
+          })
         );
-        embed.addField("Kontakt", apiCall.data.meta.contact);
-
-        embed.setAuthor(apiCall.data.meta.source);
-        embed.setTimestamp(new Date(apiCall.data.meta.lastUpdate));
-
-        message.reply(embed);
       } else message.reply("Es ist ein Fehler aufgetreten, sorry!");
     } else if (args[1] === "bl") {
       const apiCall = await covidStates();
@@ -79,46 +70,36 @@ client.on("message", async (message) => {
         );
         if (stateKey !== undefined) {
           const state = apiCall.data.data[stateKey];
-          const responseEmbed = new Discord.MessageEmbed();
 
-          responseEmbed.addFields([
-            {
-              name: "Bundesland",
-              value: multiLine(
-                state.name,
-                toCode(state.population) + " Einwohner"
-              ),
-            },
-            {
-              name: "Inzidenz",
-              value: toCode(state.weekIncidence.toFixed(2)),
-            },
-            {
-              name: "Gesamt",
-              value: multiLine(
-                "Fälle: " + toCode(state.cases),
-                "Tote: " + toCode(state.deaths),
-                "Geheilt: " + toCode(state.recovered)
-              ),
-            },
-            {
-              name: "Delta",
-              value: multiLine(
-                "Fälle: " + toCode(state.delta.cases),
-                "Tote: " + toCode(state.delta.deaths),
-                "Geheilt: " + toCode(state.delta.recovered)
-              ),
-            },
-          ]);
-          responseEmbed.setTitle(
-            "Corona in :sparkles:" + state.name + ":sparkles: "
+          message.channel.send(
+            makeEmbed({
+              delta: {
+                cases: state.delta.cases,
+                deaths: state.delta.deaths,
+                recovered: state.delta.recovered,
+              },
+              contact: apiCall.data.meta.contact,
+              locationInfo: {
+                name: "Bundesland",
+                value: multiLine(
+                  state.name,
+                  toCode(state.population) + " Einwohner"
+                ),
+              },
+              present: {
+                cases: state.cases,
+                deaths: state.deaths,
+                recovered: state.recovered,
+              },
+              time: new Date(apiCall.data.meta.lastUpdate),
+              title: state.name,
+              weekIncidence: state.weekIncidence,
+            })
           );
-          responseEmbed.setTimestamp(new Date(apiCall.data.meta.lastUpdate));
-          message.channel.send(responseEmbed);
         } else {
           message.channel.send("Sorry, das habe ich nicht gefunden!");
         }
-      }  else message.reply("Es ist ein Fehler aufgetreten, sorry!");
+      } else message.reply("Es ist ein Fehler aufgetreten, sorry!");
     } else if (args[1] === "lk") {
       const apiCall = await covidDistricts();
       if (apiCall.ok && apiCall.data) {
@@ -127,42 +108,32 @@ client.on("message", async (message) => {
         );
         if (districtNumber !== undefined) {
           const district = apiCall.data.data[districtNumber];
-          const responseEmbed = new Discord.MessageEmbed();
 
-          responseEmbed.addFields([
-            {
-              name: "Stadt",
-              value: multiLine(
-                district.name,
-                toCode(district.population) + " Einwohner"
-              ),
-            },
-            {
-              name: "Inzidenz",
-              value: toCode(district.weekIncidence.toFixed(2)),
-            },
-            {
-              name: "Gesamt",
-              value: multiLine(
-                "Fälle: " + toCode(district.cases),
-                "Tote: " + toCode(district.deaths),
-                "Geheilt: " + toCode(district.recovered)
-              ),
-            },
-            {
-              name: "Delta",
-              value: multiLine(
-                "Fälle: " + toCode(district.delta.cases),
-                "Tote: " + toCode(district.delta.deaths),
-                "Geheilt: " + toCode(district.delta.recovered)
-              ),
-            },
-          ]);
-          responseEmbed.setTitle(
-            "Corona in :sparkles:" + district.name + ":sparkles: "
+          message.channel.send(
+            makeEmbed({
+              delta: {
+                cases: district.delta.cases,
+                deaths: district.delta.deaths,
+                recovered: district.delta.recovered,
+              },
+              contact: apiCall.data.meta.contact,
+              locationInfo: {
+                name: "Stadt",
+                value: multiLine(
+                  district.name,
+                  toCode(district.population) + " Einwohner"
+                ),
+              },
+              present: {
+                cases: district.cases,
+                deaths: district.deaths,
+                recovered: district.recovered,
+              },
+              time: new Date(apiCall.data.meta.lastUpdate),
+              title: district.name,
+              weekIncidence: district.weekIncidence,
+            })
           );
-          responseEmbed.setTimestamp(new Date(apiCall.data.meta.lastUpdate));
-          message.channel.send(responseEmbed);
         } else {
           message.channel.send("Sorry, das habe ich nicht gefunden!");
         }
