@@ -36,23 +36,23 @@ export const makeEmbed = (input: {
       name: "Gesamt",
       value: multiLine(
         "Fälle: " + toCode(input.present.cases),
-        "Tote: " + toCode(input.present.deaths),
-        "Geheilt: " + toCode(input.present.recovered)
+        "Tode: " + toCode(input.present.deaths),
+        "Genesen: " + toCode(input.present.recovered)
       ),
     },
     {
       name: "Delta",
       value: multiLine(
         "Fälle: " + toCode(input.delta.cases),
-        "Tote: " + toCode(input.delta.deaths),
-        "Geheilt: " + toCode(input.delta.recovered)
+        "Tode: " + toCode(input.delta.deaths),
+        "Genesen: " + toCode(input.delta.recovered)
       ),
     },
   ]);
   if (input.rwert) {
     out.addField(input.rwert.name, input.rwert.value);
   }
-  out.addFields([{ name: "Kontakt", value: input.contact }]);
+  out.addFields([{ name: "Kontakt", value: "API:" + " " + input.contact }]);
   out.setTitle("Corona in :sparkles:" + input.title + ":sparkles: ");
   out.setTimestamp(input.time);
   out.setAuthor(input.source);
