@@ -2,10 +2,15 @@ import { config } from "dotenv";
 config();
 
 import * as Discord from "discord.js";
-import { covidDistricts, covidGermany, covidStates } from "./api";
 import { makeEmbed, multiLine, toCode } from "./dctools";
 import * as fs from "fs";
 import * as path from "path";
+import {
+  backgroundCacheStart,
+  covidGermanyCache,
+  covidDistrictsCache,
+  covidStatesCache,
+} from "./data";
 
 const client = new Discord.Client();
 
@@ -41,7 +46,7 @@ client.on("message", async (message) => {
       embed.setColor("#ff3333");
       message.channel.send(embed);
     } else if (args[1] === "de") {
-      const apiCall = await covidGermany();
+      const apiCall = await covidGermanyCache();
       if (apiCall.ok && apiCall.data) {
         message.channel.send(
           makeEmbed({
@@ -76,7 +81,7 @@ client.on("message", async (message) => {
         );
       } else message.reply("Es ist ein Fehler aufgetreten, sorry!");
     } else if (args[1] === "bl") {
-      const apiCall = await covidStates();
+      const apiCall = await covidStatesCache();
       if (apiCall.ok && apiCall.data) {
         const stateKey = Object.keys(apiCall.data.data).find((i) =>
           apiCall.data.data[i].name.toLowerCase().includes(args[2])
@@ -115,7 +120,7 @@ client.on("message", async (message) => {
         }
       } else message.reply("Es ist ein Fehler aufgetreten, sorry!");
     } else if (args[1] === "lk") {
-      const apiCall = await covidDistricts();
+      const apiCall = await covidDistrictsCache();
       if (apiCall.ok && apiCall.data) {
         const districtNumber = Object.keys(apiCall.data.data).find((i) =>
           apiCall.data.data[i].name.toLowerCase().includes(args[2])
@@ -173,5 +178,7 @@ client.once("ready", () => {
     activity: { name: "corona", type: "LISTENING" },
   });
 });
+
+backgroundCacheStart();
 
 client.login(process.env.TOKEN);
