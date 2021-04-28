@@ -1,31 +1,10 @@
 import axios from "axios";
 
-export interface covidMeta {
-  source: string;
-  contact: string;
-  info: string;
-  lastUpdate: string;
-  lastCheckedForUpdate: string;
-}
-
-export interface coivdGermanyResponse {
-  cases: number;
-  deaths: number;
-  recovered: number;
-  weekIncidence: number;
-  casesPer100k: number;
-  casesPerWeek: number;
-  delta: {
-    cases: number;
-    deaths: number;
-    recovered: number;
-  };
-  r: {
-    value: number;
-    date: string;
-  };
-  meta: covidMeta;
-}
+import {
+  coivdGermanyResponse,
+  coviddisctrictsResponse,
+  covidStatesResponse,
+} from "./apitypes";
 
 export const covidGermany = async (): Promise<{
   ok: boolean;
@@ -52,29 +31,6 @@ export const covidGermany = async (): Promise<{
   return out;
 };
 
-interface coviddisctrictResponse {
-  ags: string;
-  name: string;
-  county: string;
-  population: number;
-  cases: number;
-  deaths: number;
-  casesPerWeek: number;
-  deathsPerWeek: number;
-  recovered: number;
-  weekIncidence: number;
-  casesPer100k: number;
-  delta: {
-    cases: number;
-    deaths: number;
-    recovered: number;
-  };
-}
-interface coviddisctrictsResponse {
-  data: { [key: string]: coviddisctrictResponse };
-  meta: covidMeta;
-}
-
 export const covidDistricts = async (): Promise<{
   ok: boolean;
   data?: coviddisctrictsResponse;
@@ -95,29 +51,6 @@ export const covidDistricts = async (): Promise<{
 
   return response;
 };
-
-interface covidStateResponse {
-  id: 1;
-  name: string;
-  population: number;
-  cases: number;
-  deaths: number;
-  casesPerWeek: number;
-  deathsPerWeek: number;
-  recovered: number;
-  abbreviation: string;
-  weekIncidence: number;
-  casesPer100k: number;
-  delta: {
-    cases: number;
-    deaths: number;
-    recovered: number;
-  };
-}
-interface covidStatesResponse {
-  data: { [key: string]: covidStateResponse };
-  meta: covidMeta;
-}
 
 export const covidStates = async (): Promise<{
   ok: boolean;
