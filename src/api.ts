@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const urlprefix = process.env.API_PREFIX || "https://api.corona-zahlen.org/";
+
 export interface covidMeta {
   source: string;
   contact: string;
@@ -39,7 +41,7 @@ export const covidGermany = async (): Promise<{
   };
 
   out = await axios
-    .get("https://api.corona-zahlen.org/germany")
+    .get(urlprefix + "germany")
     .then((r) => {
       if (r.status == 200) return { ok: true, data: r.data };
       else return { ok: false };
@@ -83,7 +85,7 @@ export const covidDistricts = async (): Promise<{
     ok: boolean;
     data?: coviddisctrictsResponse;
   } = await axios
-    .get("https://api.corona-zahlen.org/districts")
+    .get(urlprefix + "districts")
     .then((r) => {
       if (r.status === 200) return { ok: true, data: r.data };
       else return { ok: false };
@@ -127,7 +129,7 @@ export const covidStates = async (): Promise<{
     ok: boolean;
     data?: covidStatesResponse;
   } = await axios
-    .get("https://api.corona-zahlen.org/states")
+    .get(urlprefix + "states")
     .then((r) => {
       if (r.status === 200) return { ok: true, data: r.data };
       else return { ok: false };
